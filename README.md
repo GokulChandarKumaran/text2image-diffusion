@@ -1,7 +1,14 @@
 # text2image-diffusion
 
 Text-to-image generation with CLIP text embeddings and Stable Diffusion, trained and evaluated on a curated MS-COCO caption subset.
-See [docs/proposal.md](docs/proposal.md) for the full proposal.
+See [docs/proposal.md](docs/proposal.md) for the full proposal ([PDF](docs/proposal.pdf)).
+
+## Team
+| Member | Role |
+|---|---|
+| Gokul Chandar Kumaran | Modeling lead & integration |
+| Loalith Madala | Data lead |
+| Yagna Praneeth Reddy Panguru | Evaluation lead |
 
 ## Layout
 ```
