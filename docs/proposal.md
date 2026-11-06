@@ -1,6 +1,6 @@
 # Project Proposal — Text-to-Image Generation with CLIP-Guided Latent Diffusion
 
-**Team:** Gokul Chandar Kumaran, Loalith Madala, Yagna Praneeth Reddy Panguru · **Date:** November 2026 · **Repo:** `github.com/<org>/text2image-diffusion`
+**Team:** Gokul Chandar Kumaran, Loalith Madala, Yagna Praneeth Reddy Panguru · **Date:** November 2026 · **Repo:** [github.com/GokulChandarKumaran/text2image-diffusion](https://github.com/GokulChandarKumaran/text2image-diffusion)
 
 ## 1. Problem & Goal
 Generate images that faithfully match natural-language descriptions. We'll start from a pretrained latent diffusion model, measure how well its outputs match their prompts on everyday scenes, then improve that match by fine-tuning on a curated image–caption subset. **Success metric:** a higher CLIPScore and better text→image retrieval than the zero-shot baseline, plus a human preference study on held-out prompts.
