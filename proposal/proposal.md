@@ -1,6 +1,6 @@
 # Text-to-Image Generation with Stable Diffusion and CLIP
 
-**Team:** Gokul Chandar Kumaran, Loalith Madala, Yagna Praneeth Reddy Panguru · November 2026
+**Team:** Gokul Chandar Kumaran, Loalith Madala, Yagna Praneeth Reddy Panguru
 **Repo:** [github.com/GokulChandarKumaran/text2image-diffusion](https://github.com/GokulChandarKumaran/text2image-diffusion)
 
 ## The idea
