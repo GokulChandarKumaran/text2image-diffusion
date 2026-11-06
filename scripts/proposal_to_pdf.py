@@ -1,14 +1,15 @@
 """Render docs/proposal.md -> docs/proposal.pdf (US Letter, compact 1-page layout) via headless Edge/Chrome."""
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import markdown
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC, HTML, PDF = ROOT / "docs" / "proposal.md", ROOT / "docs" / "proposal.html", ROOT / "docs" / "proposal.pdf"
-BROWSERS = [r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-            r"C:\Program Files\Google\Chrome\Application\chrome.exe"]
+BROWSERS = [r"C:\Program Files\Google\Chrome\Application\chrome.exe",  # Chrome first: headless Edge can silently write nothing
+            r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"]
 
 CSS = """
 @page { size: Letter; margin: 0.45in 0.5in; }
@@ -27,9 +28,14 @@ def main() -> None:
     body = markdown.markdown(SRC.read_text(encoding="utf-8"), extensions=["tables"])
     HTML.write_text(f"<!doctype html><meta charset='utf-8'><title>Proposal</title><style>{CSS}</style>{body}", encoding="utf-8")
     exe = next((b for b in BROWSERS if Path(b).exists()), None) or sys.exit("No Edge/Chrome found")
-    subprocess.run([exe, "--headless", "--disable-gpu", "--no-pdf-header-footer",
-                    f"--print-to-pdf={PDF}", HTML.as_uri()], check=True, capture_output=True)
+    PDF.unlink(missing_ok=True)  # fails here if the PDF is open in a viewer that locks it
+    # A separate profile stops headless mode from handing off to an already-open browser window.
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as profile:
+        subprocess.run([exe, "--headless=new", "--disable-gpu", "--no-pdf-header-footer", f"--user-data-dir={profile}",
+                        f"--print-to-pdf={PDF}", HTML.as_uri()], check=True, capture_output=True, timeout=120)
     HTML.unlink()
+    if not PDF.exists():
+        sys.exit("PDF was not written")
     from pypdf import PdfReader
     print(f"{PDF.name}: {len(PdfReader(PDF).pages)} page(s)")
 
