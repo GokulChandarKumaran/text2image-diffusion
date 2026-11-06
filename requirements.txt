@@ -1,0 +1,19 @@
+# Install PyTorch FIRST with the CUDA 12.8 wheels (required for RTX 50-series / Blackwell GPUs):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+# Then:
+#   pip install -r requirements.txt
+
+diffusers>=0.31
+transformers>=4.46
+accelerate>=1.0
+safetensors
+open_clip_torch>=2.26   # optional: alternative CLIP backbones
+pillow
+numpy
+pandas
+tqdm
+matplotlib
+scikit-learn
+pycocotools
+ipykernel
+jupyter
