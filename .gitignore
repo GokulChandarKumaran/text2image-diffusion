@@ -7,8 +7,7 @@ venv/
 
 # Data & model artifacts (too large for git)
 data/raw/
-data/processed/images/
-data/processed/*.npy
+data/processed/
 *.zip
 *.safetensors
 *.ckpt
