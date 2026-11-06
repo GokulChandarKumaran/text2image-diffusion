@@ -1,6 +1,6 @@
 # Project Proposal — Text-to-Image Generation with CLIP-Guided Latent Diffusion
 
-**Team:** [Member A], [Member B], [Member C], [Member D] · **Date:** November 2026 · **Repo:** `github.com/<org>/text2image-diffusion`
+**Team:** Gokul Chandar Kumaran, Loalith Madala, Yagna Praneeth Reddy Panguru · **Date:** November 2026 · **Repo:** `github.com/<org>/text2image-diffusion`
 
 ## 1. Problem & Goal
 Generate images that faithfully match natural-language descriptions. We'll start from a pretrained latent diffusion model, measure how well its outputs match their prompts on everyday scenes, then improve that match by fine-tuning on a curated image–caption subset. **Success metric:** a higher CLIPScore and better text→image retrieval than the zero-shot baseline, plus a human preference study on held-out prompts.
@@ -25,10 +25,11 @@ Generate images that faithfully match natural-language descriptions. We'll start
 ## 4. Roles
 | Member | Role | Owns |
 |---|---|---|
-| [Member A] | **Data lead** | Download, cleaning, and filtering scripts; dataset stats and EDA |
-| [Member B] | **Modeling lead** | Diffusers pipeline, LoRA fine-tuning, GPU/experiment configs |
-| [Member C] | **Evaluation lead** | CLIPScore, FID, and Recall@K harness; human study; result plots |
-| [Member D] | **Integration / PM** | Repo, environment, CI, notebooks, milestone reports, demo |
+| Gokul Chandar Kumaran | **Modeling lead & integration** | Diffusers pipeline, LoRA fine-tuning, and GPU/experiment configs, plus the repo, environment, and milestone reports |
+| Loalith Madala | **Data lead** | Download, cleaning, and filtering scripts; dataset stats and EDA; caption augmentation |
+| Yagna Praneeth Reddy Panguru | **Evaluation lead** | CLIPScore, FID, and Recall@K harness; human preference study; result plots and demo |
+
+All three members share the write-up and the final presentation.
 
 ## 5. Milestone 1 Deliverables (this submission)
 1. Dataset chosen and justified (COCO val2017 subset)
