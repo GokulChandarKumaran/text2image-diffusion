@@ -1,37 +1,32 @@
-# Project Proposal — Text-to-Image Generation with CLIP-Guided Latent Diffusion
+# Text-to-Image Generation with Stable Diffusion and CLIP
 
-**Team:** Gokul Chandar Kumaran, Loalith Madala, Yagna Praneeth Reddy Panguru · **Date:** November 2026 · **Repo:** [github.com/GokulChandarKumaran/text2image-diffusion](https://github.com/GokulChandarKumaran/text2image-diffusion)
+**Team:** Gokul Chandar Kumaran, Loalith Madala, Yagna Praneeth Reddy Panguru · **Date:** November 2026
+**Repo:** [github.com/GokulChandarKumaran/text2image-diffusion](https://github.com/GokulChandarKumaran/text2image-diffusion)
 
-## 1. Problem & Goal
-Generate images that faithfully match natural-language descriptions. We'll start from a pretrained latent diffusion model, measure how well its outputs match their prompts on everyday scenes, then improve that match by fine-tuning on a curated image–caption subset. **Success metric:** a higher CLIPScore and better text→image retrieval than the zero-shot baseline, plus a human preference study on held-out prompts.
+## 1. What we want to do
+Text-to-image models are impressive, but they still trip up on fairly ordinary requests. Ask for "two cats on a couch next to a remote" and the remote often just disappears. Our project looks at how closely a pretrained diffusion model follows its prompt on everyday scenes, and whether we can tighten that up by fine-tuning it on a small, carefully cleaned set of captioned photos. We'll count it as a success if the fine-tuned model beats the off-the-shelf version on CLIPScore and retrieval accuracy, and if people prefer its images in a blind comparison.
 
-## 2. Dataset — MS-COCO 2017 Captions (curated subset)
-| | |
-|---|---|
-| **Source** | COCO val2017: 5,000 images, ~25k human captions (5 per image) |
-| **Why COCO over Flickr30k** | More object/scene variety (80 categories), and it's the standard benchmark for text-to-image FID/CLIPScore. The 1 GB val split fits our 1k–5k target without the 18 GB train download. |
-| **Cleaning** | Normalize whitespace and punctuation; keep captions of 5–40 words that fit in 77 CLIP tokens and are ASCII; drop exact duplicates; drop images whose short side is under 256 px or whose aspect ratio is over 2:1; fix EXIF orientation and convert to RGB |
-| **Preprocessing** | Resize the short side to 512 px and center-crop to 512×512. Keep one primary caption per image and the rest for augmentation. 90/10 train/val split (seed 42). Output is HF-`imagefolder` `metadata.jsonl` |
-| **Size** | **4,926 pairs** (4,434 train / 492 val). We dropped 247 duplicate captions and 74 images that failed the size or shape checks |
+## 2. Dataset
+We're using the **MS-COCO 2017 validation set**: 5,000 photos of everyday scenes, each with five captions written by people (about 25,000 in total). We picked COCO over Flickr30k for two reasons. It covers far more kinds of objects and scenes (80 categories), and it's the dataset most text-to-image papers report on, so our numbers can be compared with theirs. The validation split is also just the right size for this milestone: about 1 GB, compared with 18 GB for the full training set.
 
-## 3. Model & Method
-- **Text encoder:** CLIP ViT-L/14. Each prompt becomes a 77×768 per-token embedding (fed to the UNet through cross-attention) and a pooled 768-d embedding (used for scoring and retrieval).
-- **Generator:** Stable Diffusion v1.5 (latent diffusion: VAE plus a UNet conditioned on text), fp16, DPM-Solver++ with 30 steps and CFG 7.5. It fits our 8 GB RTX 5060 GPUs.
-- **Phase 1 (this milestone, done):** zero-shot baseline. Text→image Recall@1/5/10 is 0.67/0.91/0.97, and CLIPScore on real pairs is 26.1. Across the 5 sample prompt→image runs, the mean CLIPScore is 28.9 at about 5 s per image. The samples show composition failures: a bus with the wrong number of decks and a missing object.
-- **Phase 2:** LoRA fine-tuning of the UNet's cross-attention layers on the training split (rank 4–16, about 3M trainable parameters).
-- **Phase 3:** ablations on guidance scale, step count, and caption choice (primary vs. augmented), then a comparison with a CLIP-guided or prompt-weighting variant.
-- **Evaluation:** CLIPScore, FID on the 500-image val split (`torchmetrics`), text→image Recall@K, and a small blind human preference study.
+Raw COCO captions are a little messy, so we cleaned them before using them. We tidied up spacing and punctuation, removed duplicates, and kept only captions between 5 and 40 words that fit within CLIP's 77-token limit. On the image side, we dropped photos that were too small (under 256 px) or too stretched (wider than 2:1), then resized and cropped the rest to 512×512. That left us with **4,926 image–caption pairs**: 4,434 for training and 492 held out for testing. For each image we use its best caption and keep the others for data augmentation later.
 
-## 4. Roles
-| Member | Role | Owns |
+## 3. Model and approach
+We're building on **Stable Diffusion v1.5**, which uses **CLIP** (ViT-L/14) to turn each prompt into the numbers the image model works from. It runs comfortably on the 8 GB laptop GPUs we have.
+
+- **Step 1, baseline (done):** we measured how well things work before changing anything. CLIP picks the correct photo out of 492 for a given caption 67% of the time, and the correct photo lands in its top 5 picks 91% of the time. Our five test generations took about 5 seconds each and scored 28.9 on CLIPScore. They also showed the kinds of mistakes we want to fix: a "double-decker" bus with only one deck, and a remote control that never showed up.
+- **Step 2, fine-tuning:** we'll train the model on our cleaned captions using LoRA, which updates only a small part of the model (about 3 million parameters), so it fits on our hardware.
+- **Step 3, experiments:** we'll compare different settings (how strictly the model follows the prompt, how many generation steps it takes, which caption we train on) to see what actually makes a difference.
+- **How we'll judge it:** CLIPScore, FID on the 492 held-out images, retrieval accuracy, and a small blind survey where people pick the image that matches better.
+
+## 4. Who's doing what
+| Member | Role | Responsible for |
 |---|---|---|
-| Gokul Chandar Kumaran | **Modeling lead & integration** | Diffusers pipeline, LoRA fine-tuning, and GPU/experiment configs, plus the repo, environment, and milestone reports |
-| Loalith Madala | **Data lead** | Download, cleaning, and filtering scripts; dataset stats and EDA; caption augmentation |
-| Yagna Praneeth Reddy Panguru | **Evaluation lead** | CLIPScore, FID, and Recall@K harness; human preference study; result plots and demo |
+| Gokul Chandar Kumaran | Modeling & integration | Generation pipeline, fine-tuning, GPU setup, the repo, milestone reports |
+| Loalith Madala | Data | Downloading, cleaning and filtering, dataset analysis, caption augmentation |
+| Yagna Praneeth Reddy Panguru | Evaluation | Scoring scripts (CLIPScore, FID, retrieval), human survey, result plots, demo |
 
-All three members share the write-up and the final presentation.
+We'll all work on the final write-up and presentation together.
 
-## 5. Milestone 1 Deliverables & Risks
-**Delivered (all in the repo):** the dataset pipeline (`scripts/preprocess.py`), the environment check (`scripts/check_env.py`, PyTorch with CUDA 12.8, Diffusers, and CLIP), the baseline notebook (`notebooks/01_text_to_embedding_baseline.ipynb`), and 5 sample prompt→image runs (`outputs/samples/grid.png`).
-
-**Risks:** limited VRAM (mitigated with fp16, attention slicing, and LoRA instead of full fine-tuning); COCO caption noise (mitigated by filtering and choosing the best caption per image); dataset licensing (COCO images are under Flickr CC licenses, so we use them for research only).
+## 5. Where we are, and what could go wrong
+Everything for Milestone 1 is in the repo: the data cleaning pipeline, the environment setup, the baseline notebook, and our first five generated images. The main risk is GPU memory. We're handling it by running the model at half precision and using LoRA rather than retraining the whole model. COCO captions can also be noisy, which is why we filtered them and picked the best one for each image. Finally, COCO images come with their own license terms, so we're using them for research only.
