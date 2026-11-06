@@ -1,0 +1,52 @@
+{
+  "model": "stable-diffusion-v1-5/stable-diffusion-v1-5",
+  "device": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "mean_clip_score": 28.89,
+  "runs": [
+    {
+      "run": 1,
+      "prompt": "A man riding a wave on top of a surfboard.",
+      "seed": 1234,
+      "steps": 30,
+      "guidance": 7.5,
+      "seconds": 5.9,
+      "clip_score": 27.56
+    },
+    {
+      "run": 2,
+      "prompt": "A plate of food with broccoli, rice and grilled chicken on a wooden table.",
+      "seed": 1235,
+      "steps": 30,
+      "guidance": 7.5,
+      "seconds": 5.17,
+      "clip_score": 29.54
+    },
+    {
+      "run": 3,
+      "prompt": "A red double-decker bus driving down a rainy city street at night.",
+      "seed": 1236,
+      "steps": 30,
+      "guidance": 7.5,
+      "seconds": 5.17,
+      "clip_score": 27.32
+    },
+    {
+      "run": 4,
+      "prompt": "Two cats sleeping on a blue couch next to a remote control.",
+      "seed": 1237,
+      "steps": 30,
+      "guidance": 7.5,
+      "seconds": 5.18,
+      "clip_score": 25.82
+    },
+    {
+      "run": 5,
+      "prompt": "A giraffe standing next to a small wooden house in a snowy field.",
+      "seed": 1238,
+      "steps": 30,
+      "guidance": 7.5,
+      "seconds": 5.15,
+      "clip_score": 34.22
+    }
+  ]
+}

@@ -34,11 +34,17 @@ PROMPTS = [
 NEGATIVE = "blurry, low quality, distorted, deformed, watermark, text"
 
 
+def _feat(x):
+    """transformers>=5 returns an output object; the projected embedding is `pooler_output`."""
+    return getattr(x, "pooler_output", x)
+
+
 @torch.no_grad()
 def clip_score(model, processor, image, text, device):
     inp = processor(text=[text], images=[image], return_tensors="pt", padding=True).to(device)
-    t = torch.nn.functional.normalize(model.get_text_features(input_ids=inp.input_ids, attention_mask=inp.attention_mask), dim=-1)
-    i = torch.nn.functional.normalize(model.get_image_features(pixel_values=inp.pixel_values), dim=-1)
+    px = inp.pixel_values.to(model.dtype)
+    t = torch.nn.functional.normalize(_feat(model.get_text_features(input_ids=inp.input_ids, attention_mask=inp.attention_mask)).float(), dim=-1)
+    i = torch.nn.functional.normalize(_feat(model.get_image_features(pixel_values=px)).float(), dim=-1)
     return float(100 * (t * i).sum().clamp(min=0))
 
 

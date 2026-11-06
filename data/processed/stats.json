@@ -1,0 +1,11 @@
+{
+  "captions_raw": 25014,
+  "drop_duplicate": 247,
+  "drop_caption_filter": 2,
+  "drop_image_filter": 74,
+  "pairs_kept": 4926,
+  "train": 4434,
+  "val": 492,
+  "caption_words_mean": 12.83,
+  "image_size": 512
+}

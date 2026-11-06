@@ -28,6 +28,7 @@ def main() -> None:
     model = CLIPModel.from_pretrained(name)
     ids = tok(["a dog riding a skateboard"], padding="max_length", max_length=77, return_tensors="pt")
     emb = model.get_text_features(**ids)
+    emb = getattr(emb, "pooler_output", emb)  # transformers>=5 returns an output object
     print(f"CLIP text emb: shape={tuple(emb.shape)}  -> environment OK")
 
 
