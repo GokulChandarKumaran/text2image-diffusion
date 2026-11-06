@@ -1,4 +1,3 @@
-"""Sanity-check the environment: PyTorch, CUDA, Diffusers, Transformers, CLIP."""
 import sys
 
 
@@ -15,7 +14,7 @@ def main() -> None:
         p = torch.cuda.get_device_properties(0)
         print(f"GPU          : {p.name}  ({p.total_memory / 1024**3:.1f} GB, sm_{p.major}{p.minor})")
         x = torch.randn(1024, 1024, device="cuda", dtype=torch.float16)
-        _ = x @ x  # fails here if the wheel lacks kernels for this GPU arch
+        _ = x @ x
         print("CUDA matmul  : OK")
 
     import diffusers, transformers
@@ -28,7 +27,7 @@ def main() -> None:
     model = CLIPModel.from_pretrained(name)
     ids = tok(["a dog riding a skateboard"], padding="max_length", max_length=77, return_tensors="pt")
     emb = model.get_text_features(**ids)
-    emb = getattr(emb, "pooler_output", emb)  # transformers>=5 returns an output object
+    emb = getattr(emb, "pooler_output", emb)
     print(f"CLIP text emb: shape={tuple(emb.shape)}  -> environment OK")
 
 

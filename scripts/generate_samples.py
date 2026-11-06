@@ -1,14 +1,3 @@
-"""Sample 5 prompt -> image test runs with Stable Diffusion 1.5 (fits an 8 GB GPU in fp16).
-
-Each run uses a fixed seed for reproducibility and is scored with CLIPScore
-(CLIP ViT-L/14 cosine x 100). Outputs:
-  outputs/samples/run_{i}.png   individual images
-  outputs/samples/grid.png      1x5 grid with prompts (commit this)
-  outputs/samples/runs.json     prompt, seed, steps, guidance, time, CLIPScore (commit this)
-
-    python scripts/generate_samples.py
-    python scripts/generate_samples.py --steps 30 --guidance 7.5 --model stable-diffusion-v1-5/stable-diffusion-v1-5
-"""
 import argparse
 import json
 import textwrap
@@ -23,7 +12,6 @@ from transformers import CLIPModel, CLIPProcessor
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "outputs" / "samples"
 
-# Mix of COCO-style captions (in-distribution) and harder compositional prompts.
 PROMPTS = [
     "A man riding a wave on top of a surfboard.",
     "A plate of food with broccoli, rice and grilled chicken on a wooden table.",
@@ -35,7 +23,6 @@ NEGATIVE = "blurry, low quality, distorted, deformed, watermark, text"
 
 
 def _feat(x):
-    """transformers>=5 returns an output object; the projected embedding is `pooler_output`."""
     return getattr(x, "pooler_output", x)
 
 
@@ -74,7 +61,7 @@ def main() -> None:
     pipe = StableDiffusionPipeline.from_pretrained(args.model, torch_dtype=dtype, safety_checker=None)
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
     pipe = pipe.to(device)
-    pipe.enable_attention_slicing()  # keeps peak VRAM well under 8 GB
+    pipe.enable_attention_slicing()
 
     clip = CLIPModel.from_pretrained("openai/clip-vit-large-patch14", torch_dtype=dtype).to(device).eval()
     proc = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")

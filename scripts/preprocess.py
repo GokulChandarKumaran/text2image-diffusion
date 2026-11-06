@@ -1,18 +1,3 @@
-"""Clean & preprocess COCO val2017 into a curated image-caption subset.
-
-Pipeline
-  1. Load captions_val2017.json (5 captions / image).
-  2. Clean captions: strip, collapse whitespace, fix spacing before punctuation,
-     sentence-case, ensure trailing period.
-  3. Filter captions: 5-40 words, <=77 CLIP tokens, ASCII-only, no exact dups.
-  4. Filter images: RGB-convertible, short side >= 256 px, aspect ratio <= 2:1.
-  5. Pick the best caption per image (longest that still fits 77 tokens) -> 1 pair/image,
-     but keep all valid captions in `all_captions` for augmentation.
-  6. Resize (short side -> 512) + center-crop 512x512, save as JPEG.
-  7. Write metadata.jsonl (HF `imagefolder` compatible) + train/val split + stats.
-
-    python scripts/preprocess.py --n 5000 --size 512
-"""
 import argparse
 import json
 import random

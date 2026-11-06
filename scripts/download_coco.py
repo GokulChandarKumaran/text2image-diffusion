@@ -1,10 +1,3 @@
-"""Download MS-COCO 2017 *val* split (5,000 images, ~25k captions).
-
-val2017 is the right size for this milestone (1k-5k pairs) and avoids the
-18 GB train download. Files land in data/raw/.
-
-    python scripts/download_coco.py
-"""
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -13,8 +6,8 @@ from tqdm import tqdm
 
 RAW = Path(__file__).resolve().parents[1] / "data" / "raw"
 FILES = {
-    "annotations_trainval2017.zip": "http://images.cocodataset.org/annotations/annotations_trainval2017.zip",  # ~241 MB
-    "val2017.zip": "http://images.cocodataset.org/zips/val2017.zip",  # ~778 MB
+    "annotations_trainval2017.zip": "http://images.cocodataset.org/annotations/annotations_trainval2017.zip",
+    "val2017.zip": "http://images.cocodataset.org/zips/val2017.zip",
 }
 
 
