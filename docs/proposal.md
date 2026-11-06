@@ -31,12 +31,7 @@ Generate images that faithfully match natural-language descriptions. We'll start
 
 All three members share the write-up and the final presentation.
 
-## 5. Milestone 1 Deliverables (this submission)
-1. Dataset chosen and justified (COCO val2017 subset)
-2. `scripts/preprocess.py` cleans and builds 1k–5k pairs
-3. Environment: PyTorch (CUDA 12.8), Diffusers, and Transformers/CLIP, checked with `scripts/check_env.py`
-4. Baseline notebook `notebooks/01_text_to_embedding_baseline.ipynb`
-5. Five sample prompt→image runs: `outputs/samples/grid.png` and `runs.json`
-6. GitHub repo initialized
+## 5. Milestone 1 Deliverables & Risks
+**Delivered (all in the repo):** the dataset pipeline (`scripts/preprocess.py`), the environment check (`scripts/check_env.py`, PyTorch with CUDA 12.8, Diffusers, and CLIP), the baseline notebook (`notebooks/01_text_to_embedding_baseline.ipynb`), and 5 sample prompt→image runs (`outputs/samples/grid.png`).
 
 **Risks:** limited VRAM (mitigated with fp16, attention slicing, and LoRA instead of full fine-tuning); COCO caption noise (mitigated by filtering and choosing the best caption per image); dataset licensing (COCO images are under Flickr CC licenses, so we use them for research only).
