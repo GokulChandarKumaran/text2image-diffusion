@@ -1,7 +1,7 @@
 # text2image-diffusion
 
 Text-to-image generation with CLIP text embeddings and Stable Diffusion, trained and evaluated on a curated MS-COCO caption subset.
-See [docs/proposal.md](docs/proposal.md) for the full proposal ([PDF](docs/proposal.pdf)).
+See [proposal/proposal.md](proposal/proposal.md) for the full proposal ([PDF](proposal/proposal.pdf)).
 
 ## Team
 | Member | Role |
@@ -19,7 +19,7 @@ scripts/
   generate_samples.py   # 5 prompt->image runs + CLIPScore -> outputs/samples/
 notebooks/
   01_text_to_embedding_baseline.ipynb   # tokenization, 77x768 conditioning, Recall@K, CLIPScore
-docs/proposal.md
+proposal/proposal.md
 ```
 
 ## Setup

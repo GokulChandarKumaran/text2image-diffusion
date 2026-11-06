@@ -6,7 +6,7 @@ from pathlib import Path
 import markdown
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC, HTML, PDF = ROOT / "docs" / "proposal.md", ROOT / "docs" / "proposal.html", ROOT / "docs" / "proposal.pdf"
+SRC, HTML, PDF = ROOT / "proposal" / "proposal.md", ROOT / "proposal" / "proposal.html", ROOT / "proposal" / "proposal.pdf"
 BROWSERS = [r"C:\Program Files\Google\Chrome\Application\chrome.exe",
             r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"]
 
